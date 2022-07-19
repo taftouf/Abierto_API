@@ -16,7 +16,7 @@ class IntegrationController extends Controller
     public function getIntegration(Request $request){
         try {
             $owner = $request->header('owner');
-            $res = DB::table('integrations')->where('owner','LIKE','%'.$owner.'%')->get();
+            $res = DB::table('integrations')->where('owner','LIKE','%'.$owner.'%')->paginate(5);
             return response()->json([
                 "integration" => $res
             ]);
@@ -32,11 +32,11 @@ class IntegrationController extends Controller
             'owner' => 'required|string|max:255',
             'name' => 'required|string|max:255'
         ]);
-
+        
         if ($validator->fails()) {
             $errors = $validator->fails();
             return response()->json([
-                'errors' => $errors
+                'errors' => $request->all()
             ], 400);
         }
 
@@ -54,10 +54,11 @@ class IntegrationController extends Controller
                         'receiver' => $request->owner,
                     ]
                 );
-
+                $res = DB::table('integrations')->where('owner','LIKE','%'.$request->owner.'%')->paginate(5);
                 return response()->json([
-                    'msg' => 'success',
+                    "integration" => $res
                 ], 200);
+
             } catch (Exception $e) {
                 return response()->json([
                     'error' => $e
