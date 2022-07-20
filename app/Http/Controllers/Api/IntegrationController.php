@@ -67,36 +67,27 @@ class IntegrationController extends Controller
         }
     }
 
-    public function updateIntegration(Request $request){
-        $validator = Validator::make($request->all(), [
-            '_id' => 'required|integer',
-            'owner' => 'required|string|max:255',
-            'list' => 'required'
-        ]);
-        die($request);
-        if ($validator->fails()) {
-            $errors = $validator->fails();
+    public function update(Request $request){
+        
+
+        try {
+            $receiver = $request->header('receiver');
+            $name = $request->header('name');
+            $_id = $request->header('_id');
+
+            $integration = Integration::find($_id);
+            $integration->receiver = $receiver;
+            $integration->name = $name;
+            $integration->save();
+
             return response()->json([
-                'errors' => $errors,
-                'msg' => $request
+                'msg' => 'success',
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e
             ], 400);
         }
-
-        if ($validator->passes()) {
-            try {
-                $integration = Integration::find($request['_id']);
-                $integration->owner = $request['owner'];
-                $integration->list = $request['list'];
-                $integration->save();
-
-                return response()->json([
-                    'msg' => 'success',
-                ], 200);
-            } catch (Exception $e) {
-                return response()->json([
-                    'error' => $e
-                ], 400);
-            }
-        }
+    
     }
 }

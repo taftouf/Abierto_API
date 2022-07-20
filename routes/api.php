@@ -22,5 +22,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/integrations', [IntegrationController::class,'getIntegration']);
     Route::post('/integrations', [IntegrationController::class,'addIntegration']);
-    Route::put('/integrations/{id}', [IntegrationController::class, 'updateIntegration']);
+    Route::get('/integration/{_id}/updateName', [IntegrationController::class, 'updateName']);
+    Route::get('/integration/{_id}/update', [IntegrationController::class, 'update']);
+
 });
