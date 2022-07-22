@@ -9,14 +9,30 @@ use App\Models\User;
 use App\Models\Integration;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 
 class IntegrationController extends Controller
 {
-    public function getIntegration(Request $request){
+    public function index(Request $request){
         try {
             $owner = $request->header('owner');
-            $res = DB::table('integrations')->where('owner','LIKE','%'.$owner.'%')->paginate(5);
+            $res = DB::table('integrations')->where('owner','LIKE','%'.$owner.'%')->paginate(6);
+            return response()->json([
+                "integration" => $res
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "error" => $e
+            ]);
+        }
+    }
+
+    public function getIntegration(Request $request){
+        try {
+            $id = $request->header('_id');
+            
+            $res = DB::table('integrations')->where('_id',$id)->get();
             return response()->json([
                 "integration" => $res
             ]);
@@ -52,9 +68,10 @@ class IntegrationController extends Controller
                         'owner' => $request->owner, 
                         'name' => $request->name,
                         'receiver' => $request->owner,
+                        'key' => $this->getKey(),
                     ]
                 );
-                $res = DB::table('integrations')->where('owner','LIKE','%'.$request->owner.'%')->paginate(5);
+                $res = DB::table('integrations')->where('owner','LIKE','%'.$request->owner.'%')->paginate(6);
                 return response()->json([
                     "integration" => $res
                 ], 200);
@@ -89,5 +106,31 @@ class IntegrationController extends Controller
             ], 400);
         }
     
+    }
+
+    public function delete(Request $request){
+        try {
+            $id = $request->header('_id');
+            $res = DB::table('integrations')->where('_id',$id)->delete();
+            return response()->json([
+                'msg' => 'success',
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e
+            ], 400);
+        }
+    }
+
+    private function getKey(){
+        $key = Str::random(4)."-".Str::random(4)."-".Str::random(4)."-".Str::random(4);
+        $res = DB::table('integrations')->where('key','LIKE','%'.$key.'%')->get();
+        $i = 0;
+        if(count($res) != 0 && $i++<10){
+            $this->getKey();
+        }else{
+            return $key;
+        }
+        return "";
     }
 }
