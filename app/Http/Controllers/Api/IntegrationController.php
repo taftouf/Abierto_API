@@ -17,7 +17,7 @@ class IntegrationController extends Controller
     public function index(Request $request){
         try {
             $owner = $request->header('owner');
-            $res = DB::table('integrations')->where('owner','LIKE','%'.$owner.'%')->paginate(6);
+            $res = DB::table('integrations')->where('owner','LIKE','%'.$owner.'%')->get();
             return response()->json([
                 "integration" => $res
             ]);
@@ -71,7 +71,7 @@ class IntegrationController extends Controller
                         'key' => $this->getKey(),
                     ]
                 );
-                $res = DB::table('integrations')->where('owner','LIKE','%'.$request->owner.'%')->paginate(6);
+                $res = DB::table('integrations')->where('owner','LIKE','%'.$request->owner.'%')->get();
                 return response()->json([
                     "integration" => $res
                 ], 200);
