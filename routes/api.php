@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\IntegrationController;
 use App\Http\Controllers\Api\TokenController;
+use App\Http\Controllers\Api\PaymentController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,3 +30,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/integration/{_id}', [IntegrationController::class, 'getIntegration']);
     Route::delete('/integration/{_id}/delete', [IntegrationController::class, 'delete']);
 });
+
+Route::post('/payments', [PaymentController::class, 'store']);
