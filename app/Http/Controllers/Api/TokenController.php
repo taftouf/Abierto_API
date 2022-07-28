@@ -18,7 +18,7 @@ class TokenController extends Controller
         try {
             $token = Token::firstOrCreate(
                 [
-                    'symbol' => 'USDTt', 
+                    'symbol' => 'USDT', 
                     'decimal' => '18',
                     'address' => '0xV1V1D3FV15T1VD2FBV2FGB1F2GB1'
                 ]
