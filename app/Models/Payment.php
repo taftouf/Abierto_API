@@ -13,7 +13,7 @@ class Payment extends Eloquent
    use HasApiTokens, HasFactory, Notifiable;
 
     protected $connection = 'mongodb';
-    protected $collection = 'payments';
+    protected $table = 'payments';
 
     protected $guarded = [];
 }

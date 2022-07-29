@@ -13,7 +13,7 @@ class User extends Eloquent
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $connection = 'mongodb';
-    protected $collection = 'users';
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *

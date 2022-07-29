@@ -13,7 +13,7 @@ class Integration extends Eloquent
    use HasApiTokens, HasFactory, Notifiable;
 
     protected $connection = 'mongodb';
-    protected $collection = 'integrations';
+    protected $table = 'integrations';
 
     protected $guarded = [];
 }
