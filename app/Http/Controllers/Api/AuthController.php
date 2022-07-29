@@ -8,10 +8,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use DB;
+use Jenssegers\Mongodb\Auth\User as Authenticatable;
 
-
-
-class AuthController extends Controller
+class AuthController extends Authenticatable
 {
     // Login
     public function login(Request $request){
