@@ -16,10 +16,10 @@ class AuthController extends Controller
         if(DB::table('users')->where('address', $request->address)->exists())
         {
             $user = User::where('address', $request['address'])->firstOrFail();
-            // $token = $user->createToken('auth_token')->plainTextToken;
+            $token = $user->createToken('auth_token')->plainTextToken;
         
             return response()->json([
-                'access_token' => '$token',
+                'access_token' => $token,
                 'token_type' => 'Bearer'
             ]);
         }
