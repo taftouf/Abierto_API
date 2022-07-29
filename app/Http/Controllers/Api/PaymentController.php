@@ -74,7 +74,7 @@ class PaymentController extends Controller
                         'platform' => $agent->platform(),
                         'browser' => $agent->browser(),
                         'languages' => $agent->languages(),
-                        'ip' => Location::get($ip)
+                        'ip' => Location::get()->countryName
                     ]
                 );
                 $res = DB::table('payments')->where('owner',$owner)->orderBy('_id', 'desc')->get();;
