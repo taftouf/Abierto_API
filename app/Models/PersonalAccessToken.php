@@ -1,5 +1,5 @@
 <?php
-
+namespace App\Models;
 use Laravel\Sanctum\Contracts\HasAbilities;
 use Jenssegers\Mongodb\Eloquent\Model;
 
