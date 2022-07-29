@@ -57,7 +57,7 @@ class PaymentController extends Controller
                 'errors' => $request->all()
             ], 400);
         }
-
+      
         
         if ($validator->passes()) {
             try {
@@ -74,7 +74,7 @@ class PaymentController extends Controller
                         'platform' => $agent->platform(),
                         'browser' => $agent->browser(),
                         'languages' => $agent->languages(),
-                        'ip' => $request->ip()
+                        'ip' => \Location::get(request->ip())
                     ]
                 );
                 $res = DB::table('payments')->where('owner',$owner)->orderBy('_id', 'desc')->get();;
