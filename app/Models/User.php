@@ -12,9 +12,12 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends \Jenssegers\Mongodb\Eloquent\Model
+class User extends \Jenssegers\Mongodb\Eloquent\Model implements
+    AuthenticatableContract,
+    AuthorizableContract,
+    CanResetPasswordContract
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use Authenticatable, Authorizable, CanResetPassword, Notifiable, HasApiTokens, HasFactory;
 
     protected $connection = 'mongodb';
     protected $collection = 'users';
