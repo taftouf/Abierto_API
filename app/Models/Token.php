@@ -13,7 +13,7 @@ class Token extends Eloquent
    use HasApiTokens, HasFactory, Notifiable;
 
     protected $connection = 'mongodb';
-    protected $table = 'tokens';
+    protected $collection = 'tokens';
 
     protected $guarded = [];
 
