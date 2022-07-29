@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Models\PersonalAccessToken;
+use App\Models\Sanctum\PersonalAccessToken;
 use Illuminate\Foundation\AliasLoader;
 
 class AppServiceProvider extends ServiceProvider
