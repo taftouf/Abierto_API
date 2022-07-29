@@ -7,7 +7,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends \Jenssegers\Mongodb\Eloquent
+class User extends \Jenssegers\Mongodb\Eloquent\Model
 {
     use Notifiable, HasApiTokens, HasFactory;
 
