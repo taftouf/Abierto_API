@@ -43,52 +43,55 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        $agent = new Agent();
+        // $agent = new Agent();
 
-        $validator = Validator::make($request->all(), [
-            'key' => 'required|string|max:255',
-            'transactionHash' => 'required|string|max:255',
-            'wallet' => 'required|string|max:255'
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'key' => 'required|string|max:255',
+        //     'transactionHash' => 'required|string|max:255',
+        //     'wallet' => 'required|string|max:255'
+        // ]);
         
-        if ($validator->fails()) {
-            $errors = $validator->fails();
-            return response()->json([
-                'errors' => $request->all()
-            ], 400);
-        }
+        // if ($validator->fails()) {
+        //     $errors = $validator->fails();
+        //     return response()->json([
+        //         'errors' => $request->all()
+        //     ], 400);
+        // }
       
-        if ($validator->passes()) {
-            try {
-                $owner = DB::table('integrations')->where('key',$request->key)->value('owner');
-                $payment = Payment::firstOrCreate(
-                    [
-                        'eventName' => $request->eventName,
-                        'owner' => $owner, 
-                        'ApiKey' => $request->key,
-                        'transactionHash' => $request->transactionHash,
-                        'wallet' => $request->wallet,
-                        'position' => $request->position,
-                        'device' => $agent->isDesktop()?"Desktop":$agent->device(),
-                        'platform' => $agent->platform(),
-                        'browser' => $agent->browser(),
-                        'languages' => $agent->languages(),
-                        'location' => Location::get($request->header('X-Forwarded-For')),
-                        'page' => $request->path(),
-                        'domain' => $request->getHost()
-                    ]
-                );
-                $res = DB::table('payments')->where('owner',$owner)->orderBy('_id', 'desc')->first();;
-                return response()->json([
-                    "payments" => $res
-                ], 200);
+        // if ($validator->passes()) {
+        //     try {
+        //         $owner = DB::table('integrations')->where('key',$request->key)->value('owner');
+        //         $payment = Payment::firstOrCreate(
+        //             [
+        //                 'eventName' => $request->eventName,
+        //                 'owner' => $owner, 
+        //                 'ApiKey' => $request->key,
+        //                 'transactionHash' => $request->transactionHash,
+        //                 'wallet' => $request->wallet,
+        //                 'position' => $request->position,
+        //                 'device' => $agent->isDesktop()?"Desktop":$agent->device(),
+        //                 'platform' => $agent->platform(),
+        //                 'browser' => $agent->browser(),
+        //                 'languages' => $agent->languages(),
+        //                 'location' => Location::get($request->header('X-Forwarded-For')),
+        //                 'page' => $request->path(),
+        //                 'domain' => $request->getHost()
+        //             ]
+        //         );
+        //         $res = DB::table('payments')->where('owner',$owner)->orderBy('_id', 'desc')->first();;
+        //         return response()->json([
+        //             "payments" => $res
+        //         ], 200);
 
-            } catch (Exception $e) {
-                return response()->json([
-                    'error' => $e
-                ], 400);
-            }
-        }
+        //     } catch (Exception $e) {
+        //         return response()->json([
+        //             'error' => $e
+        //         ], 400);
+        //     }
+        // }
+        return response()->json([
+            'errors' => $request->all()
+        ], 200);
     }
 
     /**
