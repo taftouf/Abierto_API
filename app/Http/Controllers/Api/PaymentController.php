@@ -58,7 +58,6 @@ class PaymentController extends Controller
             ], 400);
         }
       
-        $ip = $request->ip();
         if ($validator->passes()) {
             try {
                 $owner = DB::table('integrations')->where('key',$request->key)->value('owner');
