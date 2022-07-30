@@ -75,12 +75,12 @@ class PaymentController extends Controller
                         'languages' => $agent->languages(),
                         'location' => Location::get($request->header('X-Forwarded-For')),
                         'page' => $request->path(),
-                        'domain' => $request->getHttpHost()
+                        'domain' => $request->url()
                     ]
                 );
                 $res = DB::table('payments')->where('owner',$owner)->orderBy('_id', 'desc')->first();;
                 return response()->json([
-                    "success" => "true"
+                    "success" => $request->headers()
                 ], 200);
 
             } catch (Exception $e) {
