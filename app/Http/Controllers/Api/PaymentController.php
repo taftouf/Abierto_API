@@ -74,8 +74,9 @@ class PaymentController extends Controller
                         'browser' => $agent->browser(),
                         'languages' => $agent->languages(),
                         'location' => Location::get($request->header('X-Forwarded-For')),
-                        'page' => $request->path(),
-                        'domain' => $request->url()
+                        'protocol' => $request->protocol,
+                        'host' => $request->host,
+                        'pathname' => $request->pathname
                     ]
                 );
                 $res = DB::table('payments')->where('owner',$owner)->orderBy('_id', 'desc')->first();;
