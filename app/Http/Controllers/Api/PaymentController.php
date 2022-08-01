@@ -64,6 +64,36 @@ class PaymentController extends Controller
        }
     }
 
+    public function getTokenInForOwner(Request $request)
+    {
+        try {
+            $owner = $request->header('owner');
+            $res = DB::table('payments')->select('tokenIn', 'tokenOut', 'amountIn')->where('owner','LIKE','%'.$owner.'%')->get();
+            return response()->json([
+                    "data" => $res
+                ], 200);
+       } catch (Exception $e) {
+            return response()->json([
+                "err" => $e
+            ], 400);
+       }
+    }
+
+    public function getTokenInForIntegration(Request $request)
+    {
+        try {
+            $ApiKey = $request->header('ApiKey');
+            $res = DB::table('payments')->select('tokenIn', 'tokenOut', 'amountIn')->where('ApiKey','LIKE','%'.$ApiKey.'%')->get();
+            return response()->json([
+                    "data" => $res
+                ], 200);
+       } catch (Exception $e) {
+            return response()->json([
+                "err" => $e
+            ], 400);
+       }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -109,6 +139,7 @@ class PaymentController extends Controller
                         'wallet' => $request->wallet,
                         'tokenIn' => $request->tokenIn,
                         'tokenOut' => $request->tokenOut,
+                        'amountIn' => $request->amountIn,
                         'position' => $request->position,
                         'device' => $agent->isDesktop()?"Desktop":$agent->device(),
                         'platform' => $agent->platform(),
@@ -122,7 +153,7 @@ class PaymentController extends Controller
                 );
                 $res = DB::table('payments')->where('owner',$owner)->orderBy('_id', 'desc')->first();;
                 return response()->json([
-                    "success" => $request->headers()
+                    "success" => $request->all()
                 ], 200);
 
             } catch (Exception $e) {

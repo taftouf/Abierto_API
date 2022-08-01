@@ -29,7 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/integration/{_id}/delete', [IntegrationController::class, 'delete']);
     Route::get('/payments/owner', [PaymentController::class, 'getPaymentForOwner']);
     Route::get('/payments/integration', [PaymentController::class, 'getPaymentForIntegration']);
-
+    Route::get('/tokenIn/integration', [PaymentController::class, 'getTokenInForIntegration']);
+    Route::get('/tokenIn/owner', [PaymentController::class, 'getTokenInForOwner']);
 });
 
 
