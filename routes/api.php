@@ -18,10 +18,8 @@ use App\Http\Controllers\Api\PaymentController;
 |
 */
 
+// For User
 Route::post('/login', [AuthController::class, 'login']);
-
-// Route::post('/token/insert', [TokenController::class, 'insert']);
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/integrations', [IntegrationController::class,'index']);
     Route::post('/integrations', [IntegrationController::class,'addIntegration']);
@@ -29,6 +27,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/integration/{_id}/update', [IntegrationController::class, 'update']);
     Route::get('/integration/{_id}', [IntegrationController::class, 'getIntegration']);
     Route::delete('/integration/{_id}/delete', [IntegrationController::class, 'delete']);
+    Route::get('/payments/owner', [PaymentController::class, 'getPaymentForOwner']);
+    Route::get('/payments/integration', [PaymentController::class, 'getPaymentForIntegration']);
+
 });
 
+
+// for Admin
+Route::get('/payments', [PaymentController::class, 'index']);
+
+// for library
 Route::post('/payments', [PaymentController::class, 'store']);

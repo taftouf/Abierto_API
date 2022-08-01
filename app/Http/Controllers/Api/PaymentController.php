@@ -22,7 +22,46 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $res = DB::table('payments')->get();;
+                return response()->json([
+                    "data" => $res
+                ], 200);
+       } catch (Exception $e) {
+            return response()->json([
+                "err" => $e
+            ], 400);
+       }
+    }
+
+    public function getPaymentForOwner(Request $request)
+    {
+        try {
+            $owner = $request->header('owner');
+            $res = DB::table('payments')->where('owner','LIKE','%'.$owner.'%')->get();
+            return response()->json([
+                    "data" => $res
+                ], 200);
+       } catch (Exception $e) {
+            return response()->json([
+                "err" => $e
+            ], 400);
+       }
+    }
+
+    public function getPaymentForIntegration(Request $request)
+    {
+        try {
+            $ApiKey = $request->header('ApiKey');
+            $res = DB::table('payments')->where('ApiKey','LIKE','%'.$ApiKey.'%')->get();
+            return response()->json([
+                    "data" => $res
+                ], 200);
+       } catch (Exception $e) {
+            return response()->json([
+                "err" => $e
+            ], 400);
+       }
     }
 
     /**
@@ -68,6 +107,8 @@ class PaymentController extends Controller
                         'ApiKey' => $request->key,
                         'transactionHash' => $request->transactionHash,
                         'wallet' => $request->wallet,
+                        'tokenIn' => $request->tokenIn,
+                        'tokenOut' => $request->tokenOut,
                         'position' => $request->position,
                         'device' => $agent->isDesktop()?"Desktop":$agent->device(),
                         'platform' => $agent->platform(),
