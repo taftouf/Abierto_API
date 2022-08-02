@@ -66,12 +66,19 @@ class PaymentController extends Controller
     }
 
     public function getTokenInForOwner(Request $request)
-    {
+    {   
+        $tokens = [];
         try {
             $owner = $request->header('owner');
             $res = DB::table('payments')->select('tokenIn', 'tokenOut', 'amountIn')->where('owner','LIKE','%'.$owner.'%')->get();
+            $t = DB::table('payments')->select('tokenIn')->where('owner','LIKE','%'.$owner.'%')->groupBy('tokenIn')->get();
+            foreach ($t as $key => $value) {
+                $tokens[$value['tokenIn']] = $res->where('tokenIn', $value['tokenIn'])->count();
+            }
             return response()->json([
-                    "data" => $res
+                    "data" => $res,
+                    "nbrTokenIn" => $res->groupBy("tokenIn")->count(),
+                    "token" => $tokens
                 ], 200);
        } catch (Exception $e) {
             return response()->json([
@@ -126,6 +133,7 @@ class PaymentController extends Controller
             ], 400);
        }
     }
+
     /**
      * Show the form for creating a new resource.
      *
