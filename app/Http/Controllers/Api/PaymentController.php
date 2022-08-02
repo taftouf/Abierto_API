@@ -154,7 +154,7 @@ class PaymentController extends Controller
                 );
                 $res = DB::table('payments')->where('owner',$owner)->orderBy('_id', 'desc')->first();
                 return response()->json([
-                    "success" => $res
+                    "success" => true
                 ], 200);
 
             } catch (Exception $e) {
