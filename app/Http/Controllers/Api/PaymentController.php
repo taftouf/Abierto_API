@@ -136,6 +136,7 @@ class PaymentController extends Controller
                         'owner' => $owner, 
                         'ApiKey' => $request->key,
                         'transactionHash' => $request->transactionHash,
+                        'status' => $request->status,
                         'wallet' => $request->wallet,
                         'tokenIn' => $request->tokenIn,
                         'tokenOut' => $request->tokenOut,
@@ -151,9 +152,9 @@ class PaymentController extends Controller
                         'pathname' => $request->pathname
                     ]
                 );
-                $res = DB::table('payments')->where('owner',$owner)->orderBy('_id', 'desc')->first();;
+                $res = DB::table('payments')->where('owner',$owner)->orderBy('_id', 'desc')->first();
                 return response()->json([
-                    "success" => $request->all()
+                    "success" => $res
                 ], 200);
 
             } catch (Exception $e) {
