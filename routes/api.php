@@ -31,7 +31,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/payments/integration', [PaymentController::class, 'getPaymentForIntegration']);
     Route::get('/tokenIn/integration', [PaymentController::class, 'getTokenInForIntegration']);
     Route::get('/tokenIn/owner', [PaymentController::class, 'getTokenInForOwner']);
+    Route::get('/payments/success', [PaymentController::class, 'getSuccessTransactionForOwner']);
+    Route::get('/payments/failed', [PaymentController::class, 'getFailedTransactionForOwner']);
+
 });
+
+// for testing
 
 
 // for Admin
