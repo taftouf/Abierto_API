@@ -33,6 +33,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tokenIn/owner', [PaymentController::class, 'getTokenInForOwner']);
     Route::get('/payments/success', [PaymentController::class, 'getSuccessTransactionForOwner']);
     Route::get('/payments/failed', [PaymentController::class, 'getFailedTransactionForOwner']);
+    Route::get('/payments/static', [PaymentController::class, 'getPaymentStatic']);
+    Route::get('/transactions', [PaymentController::class, 'getTransaction']);
+    Route::get('/payments/delete', [PaymentController::class, 'destroy']);
 
 });
 

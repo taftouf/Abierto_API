@@ -38,7 +38,10 @@ class PaymentController extends Controller
     {
         try {
             $owner = $request->header('owner');
-            $res = DB::table('payments')->where('owner','LIKE','%'.$owner.'%')->get();
+            $res = DB::table('payments')
+            ->where('owner','LIKE','%'.$owner.'%')
+            ->orderBy('created_at', 'desc')
+            ->get();
             return response()->json([
                     "data" => $res,
                     "nbr" => $res->count()
@@ -54,7 +57,10 @@ class PaymentController extends Controller
     {
         try {
             $ApiKey = $request->header('ApiKey');
-            $res = DB::table('payments')->where('ApiKey','LIKE','%'.$ApiKey.'%')->get();
+            $res = DB::table('payments')
+            ->where('ApiKey','LIKE','%'.$ApiKey.'%')
+            ->orderBy('created_at', 'desc')
+            ->get();
             return response()->json([
                     "data" => $res
                 ], 200);
@@ -102,14 +108,82 @@ class PaymentController extends Controller
        }
     }
 
-    public function getSuccessTransactionForOwner(Request $request)
-    {
+    // public function getSuccessTransactionForOwner(Request $request)
+    // {
+    //     try {
+    //         $owner = $request->header('owner');
+    //         $res = DB::table('payments')->where('status',1)->get();
+    //         return response()->json([
+    //                 "data" => $res,
+    //                 "nbr" => $res->count()
+    //             ], 200);
+    //    } catch (Exception $e) {
+    //         return response()->json([
+    //             "err" => $e
+    //         ], 400);
+    //    }
+    // }
+
+    // public function getFailedTransactionForOwner(Request $request)
+    // {
+    //     try {
+    //         $owner = $request->header('owner');
+    //         $res = DB::table('payments')->where('status',0)->get();
+    //         return response()->json([
+    //                 "data" => $res,
+    //                 "nbr" => $res->count()
+    //             ], 200);
+    //    } catch (Exception $e) {
+    //         return response()->json([
+    //             "err" => $e
+    //         ], 400);
+    //    }
+    // }
+
+    
+
+    // EndPOINTS For Home Route
+    public function getPaymentStatic(Request $request){
+        $name = [];
+        $success = [];
+        $failed = [];
+        $ApiKey = 0;
+        $pay = [];
+        $owner = $request->header('owner');
+        $res = DB::table('integrations')->select('name','key')->where('owner','LIKE','%'.$owner.'%')->get();
+        foreach ($res as $key => $value) {
+           foreach ($value as $k => $v) {
+            if($k == 'key') {$ApiKey = $v;}
+            if($k == 'name'){
+                $s = DB::table('payments')->where([['owner','=',$owner],['ApiKey', '=', $ApiKey],['status','=',1]])->count();
+                $f = DB::table('payments')->where([['owner','=',$owner],['ApiKey', '=', $ApiKey],['status','=',0]])->count();
+                array_push($name, $v);
+                array_push($success, $s);
+                array_push($failed, $f);
+
+            }
+           }
+        }
+
+        return response()->json([
+            "data" => ["name"=>$name,"success"=>$success,"failed"=>$failed],
+            "nbr" => $res->count()
+        ], 200);
+    }
+
+
+    public function getTransaction(Request $request){
         try {
             $owner = $request->header('owner');
-            $res = DB::table('payments')->where('status',1)->get();
+            $res = DB::table('payments')
+            ->select('transactionHash', 'tokenIn', 'ApiKey', 'status')
+            ->where('owner','LIKE','%'.$owner.'%')
+            ->offset(0)
+            ->limit(4)
+            ->orderBy('created_at', 'desc')
+            ->get();
             return response()->json([
-                    "data" => $res,
-                    "nbr" => $res->count()
+                    "data" => $res
                 ], 200);
        } catch (Exception $e) {
             return response()->json([
@@ -117,23 +191,6 @@ class PaymentController extends Controller
             ], 400);
        }
     }
-
-    public function getFailedTransactionForOwner(Request $request)
-    {
-        try {
-            $owner = $request->header('owner');
-            $res = DB::table('payments')->where('status',0)->get();
-            return response()->json([
-                    "data" => $res,
-                    "nbr" => $res->count()
-                ], 200);
-       } catch (Exception $e) {
-            return response()->json([
-                "err" => $e
-            ], 400);
-       }
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -245,9 +302,19 @@ class PaymentController extends Controller
      * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Payment $payment)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            $id = $request->header('_id');
+            $res = DB::table('payments')->where('_id',$id)->delete();
+            return response()->json([
+                'msg' => 'success',
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e
+            ], 400);
+        }
     }
 
     
