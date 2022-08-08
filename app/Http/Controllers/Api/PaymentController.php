@@ -108,37 +108,37 @@ class PaymentController extends Controller
        }
     }
 
-    // public function getSuccessTransactionForOwner(Request $request)
-    // {
-    //     try {
-    //         $owner = $request->header('owner');
-    //         $res = DB::table('payments')->where('status',1)->get();
-    //         return response()->json([
-    //                 "data" => $res,
-    //                 "nbr" => $res->count()
-    //             ], 200);
-    //    } catch (Exception $e) {
-    //         return response()->json([
-    //             "err" => $e
-    //         ], 400);
-    //    }
-    // }
+    public function getSuccessTransactionForOwner(Request $request)
+    {
+        try {
+            $owner = $request->header('owner');
+            $res = DB::table('payments')->where('status',1)->get();
+            return response()->json([
+                    "data" => $res,
+                    "nbr" => $res->count()
+                ], 200);
+       } catch (Exception $e) {
+            return response()->json([
+                "err" => $e
+            ], 400);
+       }
+    }
 
-    // public function getFailedTransactionForOwner(Request $request)
-    // {
-    //     try {
-    //         $owner = $request->header('owner');
-    //         $res = DB::table('payments')->where('status',0)->get();
-    //         return response()->json([
-    //                 "data" => $res,
-    //                 "nbr" => $res->count()
-    //             ], 200);
-    //    } catch (Exception $e) {
-    //         return response()->json([
-    //             "err" => $e
-    //         ], 400);
-    //    }
-    // }
+    public function getFailedTransactionForOwner(Request $request)
+    {
+        try {
+            $owner = $request->header('owner');
+            $res = DB::table('payments')->where('status',0)->get();
+            return response()->json([
+                    "data" => $res,
+                    "nbr" => $res->count()
+                ], 200);
+       } catch (Exception $e) {
+            return response()->json([
+                "err" => $e
+            ], 400);
+       }
+    }
 
     
 
